@@ -1,22 +1,18 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm"
 import { UserMovie } from "./UserMovie"
 
-@Entity('movie')
-export class Movie {
-
+@Entity('user')
+export class User {
     @PrimaryGeneratedColumn()
     id: number
 
-    @Column()
-    title: string
-
     @Column({
-        type: "float4"
+        unique: true
     })
-    vote_average: number
+    email: string
 
     @Column()
-    vote_count: number
+    password: string
 
     @OneToMany(() => UserMovie, (userMovie) => (userMovie.movie_id))
     userMovies: Array<UserMovie>;

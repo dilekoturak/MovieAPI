@@ -1,4 +1,6 @@
 import { Movie } from './entities/Movie';
+import { User } from './entities/User';
+import { UserMovie } from './entities/UserMovie';
 import { DataSource, DataSourceOptions } from "typeorm"
 import * as dotenv from "dotenv";
 import { createDatabase } from "typeorm-extension";
@@ -13,7 +15,9 @@ const options: DataSourceOptions = {
     password: process.env.DB_PASSWORD,
     database: process.env.DB_DATABASE,
     entities: [
-        Movie
+        User,
+        Movie,
+        UserMovie
     ],
     synchronize: true,
     logging: true
