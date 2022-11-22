@@ -1,7 +1,12 @@
-import { body } from 'express-validator';
+import { body, check } from 'express-validator';
 
 export const validate = (method) => {
   switch (method) {
+    case 'movies': {
+     return [ 
+        check('size', 'Invalid size').exists().isInt({ min: 1, max: 20 })
+        ]   
+     }
     case 'register': {
      return [ 
         body('email', 'Invalid email').exists().isEmail(),

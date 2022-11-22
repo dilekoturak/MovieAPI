@@ -12,7 +12,7 @@ const authService = Container.get(AuthService);
 const router = express.Router()
 
 router.get('/movie/:id', (req, res) => movieController.getMovie(req, res));
-router.get('/movies/:page', (req, res) => movieController.getMovies(req, res));
+router.get('/movies/:page/take/:size', validate('movies'), (req, res) => movieController.getMovies(req, res));
 router.post('/user/register', validate('register'), (req, res) => userController.registerUser(req, res));
 router.post('/user/login', validate('login'), (req, res) => userController.loginUser(req, res));
 router.get('/user/:user_id/movie/:movie_id', authService.verifyToken, (req, res) => userController.getUserMovie(req, res));

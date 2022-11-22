@@ -20,15 +20,15 @@ export default class MovieService {
         return data
     }
 
-    async getMovies(pageNumber: number) {
-        const take = 10
+    async getMovies(pageNumber: number, size: number) {
+        const take = size || 10
         const page = pageNumber || 1
-        const skip = (page - 1) * take
 
         const data:{results: [], count: number} = await this.movieRepository.find(
-            { take, skip }
+            { where: {
+                page: page
+            }, take }
         );
-        console.log(data)
         return data
     }
 
