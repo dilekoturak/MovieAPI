@@ -9,14 +9,22 @@ export default class MovieController {
     }
 
     async getMovie(req: Request, res: Response) {
-        const id: number = req.params.id
-        const data = await this.movieService.getMovieByID(id)
-        return res.send(data)
+        try {
+            const id: number = req.params.id
+            const data = await this.movieService.getMovieByID(id)
+            return res.send(data)
+        } catch (error) {
+            res.status(400).json(error)
+        }
     }
 
     async getMovies(req:Request, res: Response) {
-        const page: number = req.params.page
-        const data = await this.movieService.getMovies(page)
-        return res.send(data)
+        try {
+            const page: number = req.params.page
+            const data = await this.movieService.getMovies(page)
+            return res.send(data)
+        } catch (error) {
+            res.status(400).json(error)
+        }
     }
 }

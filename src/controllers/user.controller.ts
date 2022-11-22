@@ -6,6 +6,7 @@ import * as dotenv from "dotenv"
 import MovieService from "../services/movie.service";
 import UserService from "../services/user.service";
 import { sendEmail } from "../services/email.service";
+import { validationResult } from "express-validator";
 
 @Service()
 export default class UserController {
@@ -16,6 +17,7 @@ export default class UserController {
 
     async registerUser(req:Request, res:Response) {
         try {
+            validationResult(req).throw();
             const email = req.body.email
             const password = req.body.password
             const user = await this.authService.save(email, password)
@@ -38,6 +40,7 @@ export default class UserController {
 
     async loginUser(req:Request, res:Response) {
         try {
+            validationResult(req).throw();
             const { email, password } = req.body
             const user = await this.authService.checkUser(email)
             let passCorrect = false
@@ -68,6 +71,7 @@ export default class UserController {
 
     async rateMovie(req:Request, res:Response) {
         try {
+            validationResult(req).throw();
             const user_id = req.params.user_id
             const movie_id = req.params.movie_id
             const score = req.body.score
@@ -109,6 +113,7 @@ export default class UserController {
 
     async suggestMovie(req:Request, res:Response) {
         try {
+            validationResult(req).throw();
             const user_id = req.params.user_id
             const movie_id = req.params.movie_id
             const receiver = req.body.email
