@@ -62,4 +62,15 @@ export default class MovieService {
             .where("id = :id", {id: movie_id})
             .execute()
     }
+
+    async getUserRatedMovie(user_id:number, movie_id: number) {
+        const movie = await this.movieRepository
+            .createQueryBuilder('movie')
+            .select(['movie','user_movie'])
+            .leftJoin('user_movie', 'user_movie', 'user_movie.movie_id = movie.id')
+            .where('user_movie.user_id = :user_id', { user_id: user_id })
+            .andWhere('user_movie.movie_id = :movie_id', { movie_id: movie_id })
+            .getRawOne()
+        return movie
+    }
 }

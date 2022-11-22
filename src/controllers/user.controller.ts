@@ -88,6 +88,25 @@ export default class UserController {
         }
     }
 
+    async getUserMovie(req:Request, res:Response) {
+        try {
+            const user_id = req.params.user_id
+            const movie_id = req.params.movie_id
+            const userMovie = await this.movieService.getUserRatedMovie(user_id, movie_id)
+
+            if (userMovie) {
+                res.status(200).json(userMovie)
+            } else {
+                res.status(404).json({
+                    success: false,
+                    message: "User doesn't rate movie yet"
+                })
+            }
+        } catch (error) {
+            res.status(400).json(error)
+        }
+    }
+
     async suggestMovie(req:Request, res:Response) {
         try {
             const user_id = req.params.user_id

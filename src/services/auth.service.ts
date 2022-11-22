@@ -44,14 +44,14 @@ export default class AuthService {
                     req.user = user
                     next()
                 } else {
-                    res.status(404).json({
+                    res.status(498).json({
                         success: false,
                         message: 'Invalid token'
                     })
                 }
             })
         } else {
-            res.status(404).json({
+            res.status(401).json({
                 success: false,
                 message: 'Unauthorized access'
             })
