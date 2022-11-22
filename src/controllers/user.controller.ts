@@ -47,9 +47,8 @@ export default class UserController {
 
                 if (passCorrect) {
                     dotenv.config()
-                    const token = jwt.sign({data: user}, process.env.JWT_SECRET, {expiresIn: 60*60});
-                    const refreshToken = jwt.sign({data: user}, process.env.JWT_SECRET);
-                    res.status(200).json({token, refreshToken})
+                    const token = jwt.sign({data: user}, process.env.JWT_SECRET, { expiresIn: 60*60 });
+                    res.status(200).json({token})
                 } else {
                     res.status(400).json({
                         success: false,

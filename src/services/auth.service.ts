@@ -23,8 +23,8 @@ export default class AuthService {
         return this.userRepository.save(user)
     }
 
-    checkUser(email: string) {
-        return this.userRepository.findOne({
+    async checkUser(email: string):Promise<User> {
+        return await this.userRepository.findOne({
             where: {
                 email: email
             }
