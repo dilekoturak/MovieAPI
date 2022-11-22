@@ -3,7 +3,6 @@ import { User } from './entities/User';
 import { UserMovie } from './entities/UserMovie';
 import { DataSource, DataSourceOptions } from "typeorm"
 import * as dotenv from "dotenv";
-import { createDatabase } from "typeorm-extension";
 
 dotenv.config();
 
@@ -20,14 +19,7 @@ const options: DataSourceOptions = {
         UserMovie
     ],
     synchronize: true,
-    logging: true
+    logging: false
 };
-
-(async () => {
-    await createDatabase({
-        ifNotExist: true,
-        options
-    });
-})();
 
 export const PostgresDataSource = new DataSource(options);

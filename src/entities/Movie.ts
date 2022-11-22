@@ -11,12 +11,15 @@ export class Movie {
     title: string
 
     @Column({
-        type: "float4"
+        type: "float8"
     })
     vote_average: number
 
     @Column()
     vote_count: number
+
+    @Column()
+    page: number
 
     @OneToMany(() => UserMovie, (userMovie) => (userMovie.movie_id))
     userMovies: Array<UserMovie>;
