@@ -77,16 +77,23 @@ export default class UserController {
             const score = req.body.score
             const note = req.body.note
 
-            await this.movieService.rateMovie(user_id, movie_id, score, note)
+            const data = await this.movieService.getMovieByID(movie_id)
 
-            const { id, vote_average, vote_count } = await this.movieService.getMovieByID(movie_id)
+            if (data) {
+                await this.movieService.rateMovie(user_id, movie_id, score, note)
 
-            const total = vote_count + 1
-            const calculated_avg = ( (vote_average * vote_count) + score ) / total
-
-            await this.movieService.updateAverageScore(id, calculated_avg, total)
-
-            res.status(200).json({ success: true })
+                const total = data.vote_count + 1
+                const calculated_avg = ( (data.vote_average * data.vote_count) + score ) / total
+    
+                await this.movieService.updateAverageScore(data.id, calculated_avg, total)
+    
+                res.status(200).json({ success: true })
+            } else {
+                res.status(404).json({ 
+                    success: false,
+                    message: "Movie does not exist" 
+                })
+            }
         } catch (error) {
             res.status(400).json(error)
         }
@@ -118,16 +125,22 @@ export default class UserController {
             const movie_id = req.params.movie_id
             const receiver = req.body.email
             
-            const { email } = await this.userService.getUserByID(user_id) // sender
-            const { title } = await this.movieService.getMovieByID(movie_id) // movie title
+            const sender = await this.userService.getUserByID(user_id) // sender
+            const movie = await this.movieService.getMovieByID(movie_id) // movie title
 
-            sendEmail(email, receiver, title)
+            if (sender && movie) {
+                sendEmail(sender.email, receiver, movie.title)
 
-            res.status(200).json({
-                success: true,
-                message: "Movie successfully sent to email"
-            })
-            
+                res.status(200).json({
+                    success: true,
+                    message: "Movie successfully sent to email"
+                })
+            } else {
+                res.status(404).json({
+                    success: false,
+                    message: "User or movie does not exist"
+                })
+            }            
         } catch (error) {
             res.status(400).json(error)
         }
