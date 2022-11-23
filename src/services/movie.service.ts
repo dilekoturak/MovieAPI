@@ -24,7 +24,7 @@ export default class MovieService {
         const take = size || 10
         const page = pageNumber || 1
 
-        const data:{results: [], count: number} = await this.movieRepository.find(
+        const data:{results: Array<Movie>, count: number} = await this.movieRepository.find(
             { where: {
                 page: page
             }, take }
