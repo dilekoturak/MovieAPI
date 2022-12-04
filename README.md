@@ -18,6 +18,11 @@
 
 go to jobs/node-schedule.js
 
+6) add migration
+
+npm run typeorm migration:generate src/migrations/"migration name"
+npm run typeorm migration:run
+
 change 
 "* 1 * * *" --> in every 1 hour
 with 

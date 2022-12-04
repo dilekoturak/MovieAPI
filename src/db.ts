@@ -18,7 +18,9 @@ const options: DataSourceOptions = {
         Movie,
         UserMovie
     ],
-    synchronize: true,
+    migrations: ["src/migrations/**/*.ts"],
+    subscribers: ["src/migration/**/*.ts"],
+    synchronize: false,
     logging: false
 };
 
