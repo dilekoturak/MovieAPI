@@ -11,12 +11,25 @@ const authService = Container.get(AuthService);
 
 const router = express.Router()
 
+//Get Movie - Public
 router.get('/movie/:id', (req, res) => movieController.getMovie(req, res));
+
+//Get Movies
 router.get('/movies/:page/take/:size', validate('movies'), (req, res) => movieController.getMovies(req, res));
+
+//Create User
 router.post('/user/register', validate('register'), (req, res) => userController.registerUser(req, res));
+
+//Login User
 router.post('/user/login', validate('login'), (req, res) => userController.loginUser(req, res));
-router.get('/user/:user_id/movie/:movie_id', authService.verifyToken, (req, res) => userController.getUserMovie(req, res));
-router.post('/user/:user_id/rate/:movie_id', validate('rate'), authService.verifyToken, (req, res) => userController.rateMovie(req, res));
-router.post('/user/:user_id/suggest/:movie_id', validate('suggest'), authService.verifyToken, (req, res) => userController.suggestMovie(req, res));
+
+//Get Movie - User
+router.get('/user/movie/:movie_id', authService.verifyToken, (req, res) => userController.getUserMovie(req, res));
+
+//Rate Movie
+router.post('/user/rate/:movie_id', validate('rate'), authService.verifyToken, (req, res) => userController.rateMovie(req, res));
+
+//Suggest Movie
+router.post('/user/suggest/:movie_id', validate('suggest'), authService.verifyToken, (req, res) => userController.suggestMovie(req, res));
 
 export default router

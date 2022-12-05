@@ -72,15 +72,15 @@ export default class UserController {
     async rateMovie(req:Request, res:Response) {
         try {
             validationResult(req).throw();
-            const user_id = req.params.user_id
             const movie_id = req.params.movie_id
             const score = req.body.score
             const note = req.body.note
 
             const data = await this.movieService.getMovieByID(movie_id)
+            const user = req.user
 
-            if (data) {
-                await this.movieService.rateMovie(user_id, movie_id, score, note)
+            if (data && user) {
+                await this.movieService.rateMovie(user.data.id, movie_id, score, note)
 
                 const total = data.vote_count + 1
                 const calculated_avg = ( (data.vote_average * data.vote_count) + score ) / total
@@ -101,9 +101,10 @@ export default class UserController {
 
     async getUserMovie(req:Request, res:Response) {
         try {
-            const user_id = req.params.user_id
             const movie_id = req.params.movie_id
-            const userMovie = await this.movieService.getUserRatedMovie(user_id, movie_id)
+            const user = req.user
+
+            const userMovie = user ? await this.movieService.getUserRatedMovie(user.data.id, movie_id) : null
 
             if (userMovie) {
                 res.status(200).json(userMovie)
@@ -121,11 +122,11 @@ export default class UserController {
     async suggestMovie(req:Request, res:Response) {
         try {
             validationResult(req).throw();
-            const user_id = req.params.user_id
             const movie_id = req.params.movie_id
             const receiver = req.body.email
-            
-            const sender = await this.userService.getUserByID(user_id) // sender
+            const user = req.user
+
+            const sender = user ? user.data.email : null // sender
             const movie = await this.movieService.getMovieByID(movie_id) // movie title
 
             if (sender && movie) {
