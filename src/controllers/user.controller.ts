@@ -4,16 +4,15 @@ import AuthService from "../services/auth.service";
 import * as jwt from "jsonwebtoken"
 import * as dotenv from "dotenv"
 import MovieService from "../services/movie.service";
-import UserService from "../services/user.service";
 import { sendEmail } from "../services/email.service";
 import { validationResult } from "express-validator";
 
 @Service()
 export default class UserController {
     constructor(private readonly authService: AuthService,
-                private readonly userService: UserService,
                 private readonly movieService: MovieService) {
-    }
+                    dotenv.config()
+                }
 
     async registerUser(req:Request, res:Response) {
         try {
@@ -23,9 +22,11 @@ export default class UserController {
             const user = await this.authService.save(email, password)
 
             if (user) {
+                const token = jwt.sign({data: user}, process.env.JWT_SECRET, { expiresIn: 60*60 });
                 res.status(201).json({ 
                     success: true,
-                    message: 'User successfully created'
+                    message: 'User successfully created',
+                    token
                  });
             } else {
                 res.status(400).json({
@@ -49,7 +50,6 @@ export default class UserController {
                 passCorrect = await this.authService.compare(password, user.password)
 
                 if (passCorrect) {
-                    dotenv.config()
                     const token = jwt.sign({data: user}, process.env.JWT_SECRET, { expiresIn: 60*60 });
                     res.status(200).json({token})
                 } else {
